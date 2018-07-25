@@ -1,0 +1,8 @@
+  # The name of the incident
+  name: Investigating Errors
+  # The initial message, created as the first incident update
+  body: Automated monitoring has determined that the service is experiencing errors, and the on-call engineer is beginning to investigate.
+  # Initial status for the incident. One of investigating|identified|monitoring|resolved
+  incident_status: investigating
+  # Status to set on the affected component. One of operational|degraded_performance|partial_outage|major_outage|under_maintenance
+  component_status: partial_outage
