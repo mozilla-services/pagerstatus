@@ -1,6 +1,6 @@
 import os
 import requests
-import yaml
+import poyo
 from chalicelib import settings
 
 
@@ -83,7 +83,7 @@ def close_incident(component_id, incident_id):
 # TODO allow interpolating component name in incident name and body
 def open_incident(component_id):
     template_path = f"{os.path.dirname(__file__)}/incident_templates/default.yml"
-    template = yaml.load(open(template_path, "r"))
+    template = poyo.parse_string(open(template_path, "r").read())
 
     # add our watermark so later we can identiy this incident as being created by this tool
     body = f"{template['body']}\n{settings.watermark}"

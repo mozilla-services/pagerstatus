@@ -1,5 +1,5 @@
 attrs==17.4.0
-botocore==1.10.63
+botocore==1.10.64
 certifi==2018.4.16
 chalice==1.6.0
 chardet==3.0.4
@@ -8,8 +8,8 @@ docutils==0.14
 enum-compat==0.0.2
 idna==2.7
 jmespath==0.9.3
+poyo==0.4.1
 python-dateutil==2.7.3
-PyYAML==3.13
 requests==2.19.1
 six==1.11.0
 typing==3.6.4
