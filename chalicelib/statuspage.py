@@ -43,6 +43,7 @@ def _update_incident(incident_id, incident_status, component_id, component_statu
     _request(f"incidents/{incident_id}.json", method="patch", data=data)
 
 
+# TODO log error and exclude if multiple components or no components
 def _we_created_incident(incident):
     # filter out incidents that were not opened by this tool
     if settings.watermark in incident["incident_updates"][-1]["body"]:
@@ -63,11 +64,12 @@ def components_and_incidents():
     incidents = _get_incidents()
     print(f"Found {len(incidents)} statuspage incidents")
     for incident in incidents:
-        print(f"Found statuspage incident {incident['id']}")
+        print(f"For statuspage incident {incident['id']}")
         if _we_created_incident(incident):
             affected_component = _component_from_incident(incident)
             print(f"Affected component is {affected_component}")
             components.add(affected_component)
+            # TODO log error if there was already an incident that affected this component
             components_to_incidents[affected_component] = incident["id"]
     return (components, components_to_incidents)
 
