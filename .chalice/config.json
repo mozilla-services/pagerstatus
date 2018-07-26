@@ -1,6 +1,11 @@
 {
   "version": "2.0",
   "app_name": "pagerstatus",
+  "environment_variables": {
+    "STATUSPAGE_PAGE": "CHANGEME",
+    "STATUSPAGE_KEY": "CHANGEME",
+    "PD_ACCOUNT_CHANGEME": "CHANGEME"
+  },
   "stages": {
     "dev": {
       "api_gateway_stage": "api"
