@@ -5,6 +5,11 @@ from chalicelib import settings, pagerduty, statuspage
 app = Chalice(app_name="pagerstatus")
 
 
+@app.route("/")
+def index():
+    return ["Hello from Pagerstatus"]
+
+
 @app.route("/{pagerduty_account}", methods=["POST"])
 def handle_webhook(pagerduty_account):
     try:
