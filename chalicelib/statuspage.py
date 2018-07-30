@@ -5,14 +5,9 @@ from chalicelib import settings
 
 
 def _request(path, method="get", data=None):
-    url = "https://api.statuspage.io/v1/pages/%s/%s" % (settings.statuspage_page, path)
-    headers = {"Authorization": "OAuth %s" % settings.statuspage_key}
-    if method == "patch":
-        r = requests.patch(url, headers=headers, data=data)
-    elif method == "post":
-        r = requests.post(url, headers=headers, data=data)
-    else:
-        r = requests.get(url, headers=headers)
+    url = f"https://api.statuspage.io/v1/pages/{settings.statuspage_page}/{path}"
+    headers = {"Authorization": f"OAuth {settings.statuspage_key}"}
+    r = requests.request(method, url, headers=headers, data=data)
     if r.status_code != 200 and r.status_code != 201:
         print(f"Received error {r.status_code} for {url} with body:\n{r.content}")
         r.raise_for_status()

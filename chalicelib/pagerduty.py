@@ -14,12 +14,18 @@ def incident_acknowledged_or_resolved(payload):
 
 # TODO: Handle Pagination
 def _get_acknowledged_incidents(api_key):
-    url = "https://api.pagerduty.com/incidents?limit=100&statuses%5B%5D=acknowledged&time_zone=UTC&include%5B%5D=first_trigger_log_entries"
+    url = "https://api.pagerduty.com/incidents"
+    params = {
+        "limit": "100",
+        "statuses[]": "acknowledged",
+        "time_zone": "UTC",
+        "include[]": "first_trigger_log_entries",
+    }
     headers = {
         "Authorization": f"Token token={api_key}",
         "Accept": "application/vnd.pagerduty+json;version=2",
     }
-    r = requests.get(url, headers=headers)
+    r = requests.get(url, params=params, headers=headers)
     if r.status_code != 200:
         print(f"Received error {r.status_code} for {url} with body:\n{r.content}")
         r.raise_for_status()
