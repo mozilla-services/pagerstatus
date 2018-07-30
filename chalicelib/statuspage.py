@@ -2,6 +2,7 @@ import os
 import requests
 import poyo
 from chalicelib import settings
+from functools import lru_cache
 
 
 def _request(path, method="get", data=None):
@@ -53,6 +54,25 @@ def _component_from_incident(incident):
     return incident["incident_updates"][-1]["affected_components"][-1]["code"]
 
 
+# memoize so only hit statuspage api once even if creating multiple incidents
+@lru_cache(maxsize=1)
+def _component_ids_to_names():
+    components = _request("components.json")
+    ids_to_names = {c["id"]: c["name"] for c in components}
+    return ids_to_names
+
+
+def _render_incident_text(component_id, incident_name, incident_body):
+    # replace placeholder with name of the component we're opening incident for
+    if "{{component_name}}" in incident_name or "{{component_name}}" in incident_body:
+        component_name = _component_ids_to_names()[component_id]
+        incident_name = incident_name.replace("{{component_name}}", component_name)
+        incident_body = incident_body.replace("{{component_name}}", component_name)
+    # add our watermark so later we can identiy this incident as being created by this tool
+    incident_body = f"{incident_body}\n{settings.watermark}"
+    return (incident_name, incident_body)
+
+
 def components_and_incidents():
     components = set()
     components_to_incidents = dict()
@@ -77,19 +97,16 @@ def close_incident(component_id, incident_id):
 
 
 # TODO allow choosing template based on a tag
-# TODO allow interpolating component name in incident name and body
 def open_incident(component_id):
     template_path = f"{os.path.dirname(__file__)}/incident_templates/default.yml"
     template = poyo.parse_string(open(template_path, "r").read())
-
-    # add our watermark so later we can identiy this incident as being created by this tool
-    body = f"{template['body']}\n{settings.watermark}"
+    name, body = _render_incident_text(component_id, template["name"], template["body"])
 
     print(
         f"Opening statuspage incident for component {component_id} and marking it {template['component_status']}"
     )
     _create_incident(
-        template["name"],
+        name,
         body,
         template["incident_status"],
         component_id,
