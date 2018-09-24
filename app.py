@@ -3,6 +3,7 @@ from chalice import NotFoundError, BadRequestError
 from chalicelib import settings, pagerduty, statuspage
 
 app = Chalice(app_name="pagerstatus")
+app.debug = True
 
 
 @app.route("/")
