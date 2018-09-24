@@ -36,8 +36,8 @@ def _get_acknowledged_incidents(api_key):
 def _incident_component(incident):
     try:
         tags = incident["first_trigger_log_entry"]["channel"]["details"]["tags"]
-    except KeyError:
-        print("It has no tags")
+    except (KeyError, TypeError):
+        print(f"It has no tags. Incident details were:\n{incident}")
         return None
     match = re.search(r"component[:_](\w+)", tags)
     if match:
