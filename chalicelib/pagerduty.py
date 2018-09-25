@@ -39,6 +39,10 @@ def _incident_component(incident):
     except (KeyError, TypeError):
         print(f"It has no tags. Incident details were:\n{incident}")
         return None
+    # for datadog pagerduty returns comma seperated string for tags
+    # for pingdom it returns list, which we'll reformat to match datadog
+    if isinstance(tags, list):
+        tags = ",".join(tags)
     match = re.search(r"component[:_](\w+)", tags)
     if match:
         component = match.group(1)
