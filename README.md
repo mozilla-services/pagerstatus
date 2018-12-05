@@ -1,3 +1,5 @@
+**Note to Mozillians**: In order to use our deployment of Pagerstatus, don't read this document. Instead, search Mana for _Updating Statuspage via Pagerduty_.
+
 # What is Pagerstatus?
 
 Pagerstatus is a service to automatically update [Atlassian Statuspage](https://www.statuspage.io/) based on [Pagerduty](https://www.pagerduty.com/) incidents.
