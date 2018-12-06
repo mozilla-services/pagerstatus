@@ -77,3 +77,5 @@ Pagerstatus has been tested to work with Datadog and Pingdom. In the examples be
 In datadog, tag each monitor with the form `component:component-id`.
 
 In Pingdom, tag each check with the form `component_component-id`.
+
+For emails, add a string with the form `Component: component-id` somewhere in the body.

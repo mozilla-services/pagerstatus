@@ -35,7 +35,11 @@ def _get_acknowledged_incidents(api_key):
 
 def _incident_component(incident):
     try:
-        tags = incident["first_trigger_log_entry"]["channel"]["details"]["tags"]
+        log_entry = incident["first_trigger_log_entry"]
+        if log_entry["channel"]["type"] == "email":
+            tags = log_entry["channel"]["body"]
+        else:
+            tags = log_entry["channel"]["details"]["tags"]
     except (KeyError, TypeError):
         print(f"It has no tags. Incident details were:\n{incident}")
         return None
@@ -43,7 +47,7 @@ def _incident_component(incident):
     # for pingdom it returns list, which we'll reformat to match datadog
     if isinstance(tags, list):
         tags = ",".join(tags)
-    match = re.search(r"component[:_](\w+)", tags)
+    match = re.search(r"[Cc]omponent[:_] ?(\w+)", tags)
     if match:
         component = match.group(1)
         print(f"It is tagged component {component}")
